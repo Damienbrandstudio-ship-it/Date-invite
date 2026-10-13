@@ -56,12 +56,19 @@ export default function DateInvitation() {
   const [place, setPlace] = useState("");
   const [sending, setSending] = useState(false);
 
-  async function handleConfirm() {
-    setSending(true);
-    await sendEmail({ day, time, place });
-    setSending(false);
+ async function handleConfirm() {
+  if (!day || !time || !place.trim()) return;
+
+  setSending(true);
+  const ok = await sendEmail({ day, time, place });
+  setSending(false);
+
+  if (ok) {
     setStep("done");
+  } else {
+    alert("Something went wrong while sending your date request. Please try again.");
   }
+}
 
   return (
     <div style={styles.page}>
